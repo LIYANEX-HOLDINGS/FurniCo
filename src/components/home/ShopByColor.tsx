@@ -2,22 +2,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function ShopByColor() {
+  const { t } = useTranslation();
+
   const colorTiles = [
-    { title: "Blue", hex: "bg-blue-600", image: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=600&auto=format&fit=crop" },
-    { title: "Beige", hex: "bg-[#d4cdb3]", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=600&auto=format&fit=crop" },
-    { title: "Pink", hex: "bg-pink-300", image: "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?q=80&w=600&auto=format&fit=crop" },
-    { title: "Green", hex: "bg-primary", image: "https://images.unsplash.com/photo-1616137422495-1e9e46e2aa77?q=80&w=600&auto=format&fit=crop" },
+    { title: t('blue'), hex: "bg-blue-600", image: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=600&auto=format&fit=crop" },
+    { title: t('beige'), hex: "bg-[#d4cdb3]", image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=600&auto=format&fit=crop" },
+    { title: t('pink'), hex: "bg-pink-300", image: "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?q=80&w=600&auto=format&fit=crop" },
+    { title: t('green'), hex: "bg-primary", image: "https://images.unsplash.com/photo-1616137422495-1e9e46e2aa77?q=80&w=600&auto=format&fit=crop" },
   ];
 
   const swatches = [
-    { name: "Black", bg: "bg-black" },
-    { name: "Brown", bg: "bg-[#8b4513]" },
-    { name: "Teal", bg: "bg-teal-600" },
-    { name: "White", bg: "bg-white border border-gray-300" },
-    { name: "Orange", bg: "bg-orange-500" },
-    { name: "Burgundy Red", bg: "bg-[#800020]" },
+    { name: t('black'), bg: "bg-black" },
+    { name: t('brown'), bg: "bg-[#8b4513]" },
+    { name: t('teal'), bg: "bg-teal-600" },
+    { name: t('white'), bg: "bg-white border border-gray-300" },
+    { name: t('orange'), bg: "bg-orange-500" },
+    { name: t('burgundy'), bg: "bg-[#800020]" },
   ];
 
   const containerVariants = {
@@ -41,10 +44,10 @@ export default function ShopByColor() {
           className="text-center max-w-2xl mx-auto mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-semibold text-foreground font-albert-sans mb-4">
-            Shop by Color
+            {t('shop_by_color')}
           </h2>
           <p className="text-text-muted font-roboto">
-            Find the perfect hue for your home. Browse our collections categorized by distinctive color palettes.
+            {t('footer_desc')}
           </p>
         </motion.div>
 
@@ -61,7 +64,7 @@ export default function ShopByColor() {
               <Link href="#" className="group relative aspect-square overflow-hidden rounded-lg block">
                 <Image
                   src={tile.image}
-                  alt={`${tile.title} Room`}
+                  alt={tile.title}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />

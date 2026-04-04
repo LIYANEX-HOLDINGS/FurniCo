@@ -10,10 +10,13 @@ import { useState, useEffect } from "react";
 
 import { useCmsStore } from "@/store/cmsStore";
 
+import { useTranslation } from "@/hooks/useTranslation";
+
 export default function LatestProducts() {
   const { latestProducts } = useCmsStore();
   const allProducts = useProductStore((state) => state.products);
   const [isClient, setIsClient] = useState(false);
+  const { t } = useTranslation();
   
   useEffect(() => setIsClient(true), []);
 
@@ -27,15 +30,15 @@ export default function LatestProducts() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-12">
           <div className="max-w-2xl">
             <h2 className="text-3xl md:text-4xl font-semibold text-foreground font-albert-sans mb-4">
-              {latestProducts.title}
+              {t('latest_title')}
             </h2>
             <p className="text-text-muted font-roboto text-sm md:text-base">
-              {latestProducts.description}
+              {t('latest_description')}
             </p>
           </div>
           <div className="flex items-center gap-4 mt-4 md:mt-0">
-            <Link href="#" className="font-albert-sans font-medium text-primary hover:underline underline-offset-4 tracking-wide text-sm uppercase hidden md:block">
-              View All
+            <Link href="/shop" className="font-albert-sans font-medium text-primary hover:underline underline-offset-4 tracking-wide text-sm uppercase hidden md:block">
+              {t('view_all')}
             </Link>
           </div>
         </div>

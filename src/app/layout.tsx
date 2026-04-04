@@ -7,6 +7,9 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { CartDrawer } from "@/components/ui/CartDrawer";
 import { WishlistDrawer } from "@/components/ui/WishlistDrawer";
+import StoreInitializer from "@/components/providers/StoreInitializer";
+
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const albertSans = Albert_Sans({
   variable: "--font-albert-sans",
@@ -34,15 +37,18 @@ export default function RootLayout({
       className={`${albertSans.variable} ${roboto.variable} h-full antialiased font-albert-sans text-[#121212]`}
     >
       <body className="min-h-full flex flex-col">
-        {!isAdminPath && <Header />}
-        <main className="flex-grow">{children}</main>
-        {!isAdminPath && (
-          <>
-            <Footer />
-            <CartDrawer />
-            <WishlistDrawer />
-          </>
-        )}
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+          <StoreInitializer />
+          {!isAdminPath && <Header />}
+          <main className="flex-grow">{children}</main>
+          {!isAdminPath && (
+            <>
+              <Footer />
+              <CartDrawer />
+              <WishlistDrawer />
+            </>
+          )}
+        </GoogleOAuthProvider>
       </body>
     </html>
   );

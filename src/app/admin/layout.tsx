@@ -1,8 +1,10 @@
 "use client"
 import Link from "next/link";
-import { LayoutDashboard, Package, Layout, ShoppingCart, ArrowLeft, Home, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { LayoutDashboard, Package, Layout, ShoppingCart, ArrowLeft, Home, Menu, X, FileText } from "lucide-react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/store/authStore";
 
 export default function AdminLayout({
   children,
@@ -10,12 +12,25 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const router = useRouter();
+  const { user, isAuthenticated } = useAuthStore();
+
+  useEffect(() => {
+    if (!isAuthenticated || user?.role !== "admin") {
+      router.push("/");
+    }
+  }, [isAuthenticated, user, router]);
+
+  if (!isAuthenticated || user?.role !== "admin") {
+    return null; 
+  }
 
   const navItems = [
     { label: "Dashboard", icon: LayoutDashboard, href: "/admin" },
     { label: "Products", icon: Package, href: "/admin/products" },
     { label: "Website Content", icon: Layout, href: "/admin/content" },
     { label: "Orders", icon: ShoppingCart, href: "/admin/orders" },
+    { label: "Logs", icon: FileText, href: "/admin/blogs" },
   ];
 
   const bottomItems = [

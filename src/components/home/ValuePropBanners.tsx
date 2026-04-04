@@ -3,33 +3,36 @@ import Image from "next/image";
 import Link from "next/link";
 import { Hammer, Leaf, MousePointerClick, Armchair, HelpCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function ValuePropBanners() {
+  const { t } = useTranslation();
+
   const valueProps = [
     {
       icon: <Hammer className="w-8 h-8 text-primary stroke-[1.5]" />,
-      badge: "Craftsmanship Guaranteed",
-      text: "Every piece is meticulously handcrafted by skilled artisans.",
+      badge: t('quality'),
+      text: t('quality_desc'),
     },
     {
       icon: <Leaf className="w-8 h-8 text-primary stroke-[1.5]" />,
-      badge: "Sustainability at Heart",
-      text: "We prioritize eco-friendly materials and practices in our creations.",
+      badge: t('sustainability'),
+      text: t('sustain_desc'),
     },
     {
       icon: <MousePointerClick className="w-8 h-8 text-primary stroke-[1.5]" />,
-      badge: "Customize for a Personal Touch",
-      text: "Tailor your furniture to fit your space and style perfectly.",
+      badge: t('community'),
+      text: t('community_desc'),
     },
     {
       icon: <Armchair className="w-8 h-8 text-primary stroke-[1.5]" />,
-      badge: "Durability and Quality Focus",
-      text: "Built to last, using only the highest quality materials.",
+      badge: t('modern'),
+      text: t('modern_desc'),
     },
     {
       icon: <HelpCircle className="w-8 h-8 text-primary stroke-[1.5]" />,
-      badge: "Customize for a Personal Touch",
-      text: "Dedicated support to ensure a seamless shopping experience.",
+      badge: t('need_help'),
+      text: t('newsletter'),
     }
   ];
 
@@ -57,16 +60,16 @@ export default function ValuePropBanners() {
             className="flex flex-col max-w-lg"
           >
             <h2 className="text-3xl md:text-4xl lg:text-[42px] font-bold text-foreground font-albert-sans leading-[1.2] mb-6">
-              Specializes in artisanal, handcrafted furniture, blending traditional woodworking techniques!
+              {t('artisan_title')}
             </h2>
             <p className="text-text-muted font-roboto text-[15px] leading-relaxed mb-8 max-w-md">
-              With contemporary design to create timeless pieces that add warmth and character to any space.
+              {t('artisan_desc')}
             </p>
             <Link 
-              href="#"
+              href="/about"
               className="bg-black hover:bg-black/80 text-white font-albert-sans font-semibold text-[14px] px-8 py-3.5 rounded-full w-fit transition-colors shadow-sm"
             >
-              About CozyCorner
+              {t('about')}
             </Link>
           </motion.div>
 

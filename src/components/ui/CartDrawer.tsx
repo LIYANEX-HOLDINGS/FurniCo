@@ -7,9 +7,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/store/cartStore';
 import { useUiStore } from '@/store/uiStore';
 
+import { useTranslation } from '@/hooks/useTranslation';
+import { Price } from './Price';
+
 export function CartDrawer() {
   const { items, removeFromCart, updateQuantity, getCartTotal } = useCartStore();
   const { isCartDrawerOpen, toggleCartDrawer } = useUiStore();
+  const { t } = useTranslation();
 
   return (
     <AnimatePresence>
@@ -36,7 +40,7 @@ export function CartDrawer() {
             <div className="flex items-center justify-between p-5 border-b border-border-light">
               <div className="flex items-center gap-2">
                 <ShoppingBag className="w-5 h-5" />
-                <h2 className="font-albert-sans font-semibold text-lg">Shopping Cart ({items.length})</h2>
+                <h2 className="font-albert-sans font-semibold text-lg">{t('cart_title')} ({items.length})</h2>
               </div>
               <button onClick={toggleCartDrawer} className="p-2 hover:bg-bg-light rounded-full transition-colors">
                 <X className="w-5 h-5 text-text-muted" />
@@ -48,8 +52,8 @@ export function CartDrawer() {
               {items.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center text-text-muted">
                   <ShoppingBag className="w-16 h-16 mb-4 opacity-20" />
-                  <p className="font-albert-sans text-lg mb-2">Your cart is empty.</p>
-                  <button onClick={toggleCartDrawer} className="text-primary hover:underline font-medium">Continue Shopping</button>
+                  <p className="font-albert-sans text-lg mb-2">{t('cart_empty')}</p>
+                  <button onClick={toggleCartDrawer} className="text-primary hover:underline font-medium">{t('continue_shopping')}</button>
                 </div>
               ) : (
                 <div className="flex flex-col gap-6">
@@ -81,9 +85,7 @@ export function CartDrawer() {
                               <Plus className="w-3 h-3" />
                             </button>
                           </div>
-                          <span className="font-albert-sans font-semibold text-primary">
-                            ${(item.price * item.quantity).toFixed(2)}
-                          </span>
+                          <Price amount={item.price * item.quantity} className="font-albert-sans font-semibold text-primary" />
                         </div>
                       </div>
                     </div>
@@ -96,16 +98,16 @@ export function CartDrawer() {
             {items.length > 0 && (
               <div className="border-t border-border-light p-5 bg-[#fdfdfd]">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="font-roboto text-text-muted font-medium">Subtotal</span>
-                  <span className="font-albert-sans font-bold text-xl">${getCartTotal().toFixed(2)}</span>
+                  <span className="font-roboto text-text-muted font-medium">{t('subtotal')}</span>
+                  <Price amount={getCartTotal()} className="font-albert-sans font-bold text-xl" />
                 </div>
-                <p className="text-[12px] text-text-muted mb-4 font-roboto">Taxes and shipping calculated at checkout</p>
+                <p className="text-[12px] text-text-muted mb-4 font-roboto">{t('checkout_msg')}</p>
                 <div className="flex flex-col gap-3">
                   <button className="w-full bg-foreground text-white font-albert-sans font-medium hover:bg-primary transition-colors py-3.5 rounded-sm">
-                    View Cart
+                    {t('view_cart')}
                   </button>
                   <button className="w-full bg-primary text-white font-albert-sans font-medium hover:bg-[#168a55] transition-colors py-3.5 rounded-sm">
-                    Checkout
+                    {t('checkout')}
                   </button>
                 </div>
               </div>

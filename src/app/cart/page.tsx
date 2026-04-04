@@ -1,22 +1,84 @@
 "use client"
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCartStore } from "@/store/cartStore";
+import { useAuthStore } from "@/store/authStore";
 import { Trash2, Plus, Minus, ArrowLeft } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
+import { Price } from "@/components/ui/Price";
 
 export default function CartPage() {
-  const { items, removeFromCart, updateQuantity, getCartTotal } = useCartStore();
+  const { t } = useTranslation();
+  const router = useRouter();
+  const { items, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCartStore();
+  const { token } = useAuthStore();
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+
+  const handleCheckout = async () => {
+    if (items.length === 0) return;
+    setIsCheckingOut(true);
+    try {
+      const orderData = {
+        items: items.map(item => ({
+          id: item.id,
+          name: item.name,
+          brand: item.brand,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.image
+        })),
+        shippingDetails: {
+          fullName: "Demo User", // Placeholder for now
+          email: "demo@example.com",
+          address: "123 Main St",
+          city: "New York",
+          state: "NY",
+          zipCode: "10001",
+          country: "USA"
+        },
+        pricing: {
+          subtotal: getCartTotal(),
+          shipping: 0,
+          tax: 0,
+          total: getCartTotal()
+        }
+      };
+
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(orderData)
+      });
+
+      if (res.ok) {
+        clearCart();
+        router.push("/orders");
+      } else {
+        alert("Failed to place order. Please try again.");
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+      alert("An error occurred during checkout.");
+    } finally {
+      setIsCheckingOut(false);
+    }
+  };
 
   return (
     <div className="py-16 md:py-24 bg-background min-h-screen">
       <div className="container mx-auto px-4 max-w-7xl">
-        <h1 className="text-3xl md:text-5xl font-bold font-albert-sans mb-10">Shopping Cart</h1>
+        <h1 className="text-3xl md:text-5xl font-bold font-albert-sans mb-10">{t('cart_title')}</h1>
 
         {items.length === 0 ? (
           <div className="text-center py-20 bg-bg-light rounded-sm">
-            <h2 className="text-2xl font-albert-sans mb-4">Your cart is currently empty.</h2>
+            <h2 className="text-2xl font-albert-sans mb-4">{t('cart_empty_msg')}</h2>
             <Link href="/shop" className="text-primary hover:underline font-medium inline-flex items-center gap-2">
-              <ArrowLeft className="w-4 h-4" /> Return to shop
+              <ArrowLeft className="w-4 h-4" /> {t('return_to_shop')}
             </Link>
           </div>
         ) : (
@@ -50,9 +112,10 @@ export default function CartPage() {
                           <Plus className="w-4 h-4" />
                         </button>
                       </div>
-                      <span className="font-albert-sans font-bold text-xl">
-                        ${(item.price * item.quantity).toFixed(2)}
-                      </span>
+                      <Price 
+                        amount={item.price * item.quantity} 
+                        className="font-albert-sans font-bold text-xl" 
+                      />
                     </div>
                   </div>
                 </div>
@@ -61,25 +124,29 @@ export default function CartPage() {
 
             <div className="w-full lg:w-[400px]">
               <div className="bg-[#f9f9f9] border border-border-light rounded p-8 sticky top-[100px]">
-                <h3 className="font-albert-sans font-semibold text-2xl mb-6 border-b border-border-light pb-4">Order Summary</h3>
+                <h3 className="font-albert-sans font-semibold text-2xl mb-6 border-b border-border-light pb-4">{t('order_summary')}</h3>
                 <div className="flex items-center justify-between mb-4 text-text-muted">
-                  <span>Subtotal</span>
-                  <span className="font-medium text-foreground">${getCartTotal().toFixed(2)}</span>
+                  <span>{t('subtotal')}</span>
+                  <Price amount={getCartTotal()} className="font-medium text-foreground" />
                 </div>
                 <div className="flex items-center justify-between mb-6 text-text-muted">
-                  <span>Shipping</span>
-                  <span>Calculated at checkout</span>
+                  <span>{t('shipping_label')}</span>
+                  <span>{t('calc_at_checkout')}</span>
                 </div>
                 <div className="flex items-center justify-between mb-8 border-t border-border-light pt-6">
-                  <span className="font-bold font-albert-sans text-xl">Total</span>
-                  <span className="font-bold font-albert-sans text-2xl tracking-tighter">${getCartTotal().toFixed(2)}</span>
+                  <span className="font-bold font-albert-sans text-xl">{t('total_label')}</span>
+                  <Price amount={getCartTotal()} className="font-bold font-albert-sans text-2xl tracking-tighter" />
                 </div>
-                <button className="w-full bg-primary text-white hover:bg-primary-hover transition-colors font-albert-sans font-semibold text-[15px] py-4 rounded shadow-sm">
-                  Proceed to Checkout
+                <button 
+                  onClick={handleCheckout}
+                  disabled={isCheckingOut}
+                  className="w-full bg-primary text-white hover:bg-primary-hover transition-colors font-albert-sans font-semibold text-[15px] py-4 rounded shadow-sm disabled:opacity-50"
+                >
+                  {isCheckingOut ? t('processing') : t('proceed_to_checkout')}
                 </button>
                 <div className="mt-6 flex justify-center">
                   <Link href="/shop" className="text-text-muted hover:text-primary text-sm font-medium transition-colors flex items-center gap-2">
-                    <ArrowLeft className="w-4 h-4" /> Continue Shopping
+                    <ArrowLeft className="w-4 h-4" /> {t('continue_shopping')}
                   </Link>
                 </div>
               </div>

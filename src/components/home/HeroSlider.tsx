@@ -13,10 +13,12 @@ import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 
 import { useCmsStore } from "@/store/cmsStore";
+import { useTranslation } from "@/hooks/useTranslation";
 import { useState, useEffect } from "react";
 
 export default function HeroSlider() {
   const { heroSlides } = useCmsStore();
+  const { t } = useTranslation();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => setIsClient(true), []);
@@ -65,7 +67,7 @@ export default function HeroSlider() {
                       transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                       className="text-4xl md:text-[64px] font-bold mb-6 text-foreground leading-[1.1]"
                     >
-                      {slide.title}
+                      {index === 0 ? t('hero_title') : index === 1 ? t('banner_title_2') : t('banner_title_3')}
                     </motion.h1>
                     
                     <motion.p 
@@ -74,7 +76,7 @@ export default function HeroSlider() {
                       transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                       className="text-lg text-text-muted mb-8 font-roboto max-w-md font-normal"
                     >
-                      {slide.subtitle}
+                      {index === 0 ? t('hero_subtitle') : index === 1 ? t('banner_subtitle_2') : t('banner_subtitle_3')}
                     </motion.p>
                     
                     <motion.div
@@ -83,7 +85,7 @@ export default function HeroSlider() {
                       transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
                     >
                       <Button size="lg" className="group/btn rounded-[4px] px-[35px] py-[15px] h-auto gap-3 uppercase tracking-wider text-[13px] font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all">
-                        {slide.buttonText}
+                        {t('shop_now')}
                         <div className="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center group-hover/btn:translate-x-1 transition-transform">
                           <ArrowRight className="w-3 h-3" />
                         </div>

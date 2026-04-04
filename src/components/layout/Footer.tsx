@@ -1,7 +1,10 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import Link from "next/link";
 import { Users, Camera, MessageSquare, PinIcon as Pinterest, Home } from "lucide-react";
 
 export default function Footer() {
+  const { t } = useTranslation();
+
   return (
     <footer className="bg-[#121212] text-white pt-16 pb-6">
       <div className="container mx-auto px-4 max-w-7xl">
@@ -20,7 +23,7 @@ export default function Footer() {
             </Link>
             
             <p className="text-[#a0a0a0] font-roboto text-sm max-w-xs leading-relaxed">
-              We create modern spaces with high-quality furniture that brings comfort and style into your home.
+              {t('footer_desc')}
             </p>
             
             <div className="flex items-center space-x-4">
@@ -41,35 +44,35 @@ export default function Footer() {
 
           {/* Links 1 */}
           <div className="space-y-6">
-            <h4 className="font-albert-sans font-medium text-lg">Shop</h4>
+            <h4 className="font-albert-sans font-medium text-lg">{t('shop')}</h4>
             <ul className="space-y-3 font-roboto text-sm text-[#a0a0a0]">
-              <li><Link href="/shop?category=Office" className="hover:text-primary transition-colors">Desks</Link></li>
-              <li><Link href="/shop?category=Chairs" className="hover:text-primary transition-colors">Chairs</Link></li>
-              <li><Link href="/shop?category=Sofas" className="hover:text-primary transition-colors">Sofas and Couches</Link></li>
-              <li><Link href="/shop?category=Tables" className="hover:text-primary transition-colors">Meeting tables</Link></li>
-              <li><Link href="/shop?category=Lighting" className="hover:text-primary transition-colors">Lighting</Link></li>
+              <li><Link href="/shop?category=Office" className="hover:text-primary transition-colors">{t('desks')}</Link></li>
+              <li><Link href="/shop?category=Chairs" className="hover:text-primary transition-colors">{t('chairs')}</Link></li>
+              <li><Link href="/shop?category=Sofas" className="hover:text-primary transition-colors">{t('sofas')}</Link></li>
+              <li><Link href="/shop?category=Tables" className="hover:text-primary transition-colors">{t('tables')}</Link></li>
+              <li><Link href="/shop?category=Lighting" className="hover:text-primary transition-colors">{t('lighting')}</Link></li>
             </ul>
           </div>
 
           {/* Links 2 */}
           <div className="space-y-6">
-            <h4 className="font-albert-sans font-medium text-lg">About Us</h4>
+            <h4 className="font-albert-sans font-medium text-lg">{t('about')}</h4>
             <ul className="space-y-3 font-roboto text-sm text-[#a0a0a0]">
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Our Story</Link></li>
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Careers</Link></li>
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Press</Link></li>
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Sustainability</Link></li>
+              <li><Link href="/about" className="hover:text-primary transition-colors">{t('story')}</Link></li>
+              <li><Link href="/about" className="hover:text-primary transition-colors">{t('community')}</Link></li>
+              <li><Link href="/about" className="hover:text-primary transition-colors">{t('quality')}</Link></li>
+              <li><Link href="/about" className="hover:text-primary transition-colors">{t('sustainability')}</Link></li>
             </ul>
           </div>
 
           {/* Links 3 - Help */}
           <div className="space-y-6">
-            <h4 className="font-albert-sans font-medium text-lg">Help & Support</h4>
+            <h4 className="font-albert-sans font-medium text-lg">{t('useful_links')}</h4>
             <ul className="space-y-3 font-roboto text-sm text-[#a0a0a0]">
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
-              <li><Link href="/shop" className="hover:text-primary transition-colors">FAQ</Link></li>
-              <li><Link href="/wishlist" className="hover:text-primary transition-colors">Returns & Exchanges</Link></li>
-              <li><Link href="/cart" className="hover:text-primary transition-colors">Shipping Information</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors">{t('contact_us')}</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors">{t('faq')}</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors">{t('tracking')}</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors">{t('shipping')}</Link></li>
             </ul>
           </div>
         </div>
@@ -77,7 +80,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="pt-6 border-t border-[#1e1e1e] flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-[#666666] font-roboto text-sm">
-            &copy; {new Date().getFullYear()} CozyCorner. All Rights Reserved.
+            {t('copyright').replace('%d', new Date().getFullYear().toString())}
           </p>
           <div className="flex gap-2">
             {/* Payment icons placeholder */}

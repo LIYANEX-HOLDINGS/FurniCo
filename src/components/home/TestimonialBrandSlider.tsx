@@ -8,10 +8,12 @@ import 'swiper/css/effect-fade';
 
 import { useCmsStore } from "@/store/cmsStore";
 import { useState, useEffect } from "react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function TestimonialBrandSlider() {
   const { testimonials, brands } = useCmsStore();
   const [isClient, setIsClient] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => setIsClient(true), []);
 
@@ -28,6 +30,10 @@ export default function TestimonialBrandSlider() {
               <Star key={i} className="w-5 h-5 fill-current" />
             ))}
           </div>
+
+          <h2 className="text-xl md:text-2xl font-bold font-albert-sans text-foreground mb-6 uppercase tracking-widest">
+            {t('testimonials_title')}
+          </h2>
 
           <Swiper
             modules={[Autoplay, EffectFade]}
@@ -82,16 +88,16 @@ export default function TestimonialBrandSlider() {
       <section className="py-16 md:py-24 bg-primary text-white text-center px-4">
         <div className="container mx-auto max-w-2xl">
           <h2 className="text-3xl md:text-4xl font-semibold font-albert-sans mb-4">
-            Join our newsletter and get $20 discount
+            {t('newsletter')}
           </h2>
           <p className="text-white/80 font-roboto mb-10 text-sm md:text-base">
-            Subscribe to receive updates on new arrivals, special offers, and styling tips directly to your inbox.
+            {t('footer_desc')}
           </p>
           
           <form className="flex flex-col sm:flex-row max-w-lg mx-auto gap-3">
             <input
               type="email"
-              placeholder="Your email address"
+              placeholder={t('email_placeholder')}
               className="flex-1 bg-white/10 border border-white/20 text-white placeholder:text-white/60 px-6 py-4 rounded focus:outline-none focus:bg-white/20 transition-colors font-roboto w-full"
               required
             />
@@ -99,7 +105,7 @@ export default function TestimonialBrandSlider() {
               type="submit"
               className="bg-white text-primary font-albert-sans font-semibold px-8 py-4 rounded hover:bg-gray-100 transition-colors uppercase tracking-widest text-sm"
             >
-              Subscribe
+              {t('subscribe')}
             </button>
           </form>
         </div>

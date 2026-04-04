@@ -3,11 +3,15 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "../ui/Button";
 import { useCmsStore } from "@/store/cmsStore";
+import { useTranslation } from "@/hooks/useTranslation";
+
+import { Price } from "../ui/Price";
 
 export default function DealCountdown() {
   const { dealDay } = useCmsStore();
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [isClient, setIsClient] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setIsClient(true);
@@ -43,7 +47,9 @@ export default function DealCountdown() {
         <div className="bg-bg-light rounded-xl overflow-hidden flex flex-col md:flex-row relative group">
           
           <div className="w-full md:w-1/2 p-8 md:p-16 flex flex-col justify-center relative z-10">
-            <span className="text-[#e32c2b] font-albert-sans font-semibold tracking-wider uppercase mb-2">{dealDay.title}</span>
+            <span className="text-[#e32c2b] font-albert-sans font-semibold tracking-wider uppercase mb-2">
+              {t('deal_of_the_day')}
+            </span>
             <h2 className="text-3xl md:text-5xl font-semibold text-foreground font-albert-sans mb-4">
               {dealDay.subtitle}
             </h2>
@@ -52,8 +58,8 @@ export default function DealCountdown() {
             </p>
             
             <div className="flex items-center gap-4 mb-10">
-              <span className="text-3xl font-bold text-primary">${dealDay.price.toFixed(2)}</span>
-              <span className="text-lg text-text-muted line-through">${dealDay.oldPrice.toFixed(2)}</span>
+              <Price amount={dealDay.price} className="text-3xl font-bold text-primary" />
+              <Price amount={dealDay.oldPrice} className="text-lg text-text-muted line-through" />
             </div>
 
             {/* Countdown Flip Boxes */}
@@ -62,32 +68,34 @@ export default function DealCountdown() {
                 <div className="w-14 h-14 md:w-16 md:h-16 bg-white shadow-sm flex items-center justify-center rounded text-2xl font-bold font-albert-sans text-foreground mb-2">
                   {formatNumber(timeLeft.days)}
                 </div>
-                <span className="text-xs uppercase text-text-muted font-roboto tracking-wider">Days</span>
+                <span className="text-xs uppercase text-text-muted font-roboto tracking-wider">{t('days')}</span>
               </div>
               <span className="text-2xl font-bold mt-3 text-text-muted">:</span>
               <div className="flex flex-col items-center">
                 <div className="w-14 h-14 md:w-16 md:h-16 bg-white shadow-sm flex items-center justify-center rounded text-2xl font-bold font-albert-sans text-foreground mb-2">
                   {formatNumber(timeLeft.hours)}
                 </div>
-                <span className="text-xs uppercase text-text-muted font-roboto tracking-wider">Hrs</span>
+                <span className="text-xs uppercase text-text-muted font-roboto tracking-wider">{t('hrs')}</span>
               </div>
               <span className="text-2xl font-bold mt-3 text-text-muted">:</span>
               <div className="flex flex-col items-center">
                 <div className="w-14 h-14 md:w-16 md:h-16 bg-white shadow-sm flex items-center justify-center rounded text-2xl font-bold font-albert-sans text-foreground mb-2">
                   {formatNumber(timeLeft.minutes)}
                 </div>
-                <span className="text-xs uppercase text-text-muted font-roboto tracking-wider">Mins</span>
+                <span className="text-xs uppercase text-text-muted font-roboto tracking-wider">{t('mins')}</span>
               </div>
               <span className="text-2xl font-bold mt-3 text-text-muted">:</span>
               <div className="flex flex-col items-center">
                 <div className="w-14 h-14 md:w-16 md:h-16 bg-white shadow-sm flex items-center justify-center rounded text-2xl font-bold font-albert-sans text-primary mb-2">
                   {formatNumber(timeLeft.seconds)}
                 </div>
-                <span className="text-xs uppercase text-text-muted font-roboto tracking-wider">Secs</span>
+                <span className="text-xs uppercase text-text-muted font-roboto tracking-wider">{t('secs')}</span>
               </div>
             </div>
 
-            <Button size="lg" className="w-fit text-base uppercase tracking-wider px-10">Shop Now</Button>
+            <Button size="lg" className="w-fit text-base uppercase tracking-wider px-10">
+              {t('shop_now')}
+            </Button>
           </div>
 
           <div className="w-full md:w-1/2 h-[400px] md:h-auto relative">

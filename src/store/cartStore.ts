@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Product } from "@/data/mockProducts";
+import { useAuthStore } from "./authStore";
 
 export interface CartItem extends Product {
   quantity: number;
@@ -8,6 +9,7 @@ export interface CartItem extends Product {
 
 interface CartStore {
   items: CartItem[];
+  setCart: (items: CartItem[]) => void;
   addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
@@ -21,38 +23,60 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
       
+      setCart: (items) => {
+        set({ items });
+      },
+
       addToCart: (product, quantity = 1) => {
         set((state) => {
+          let newItems;
           const existingItem = state.items.find((item) => item.id === product.id);
           if (existingItem) {
-            return {
-              items: state.items.map((item) =>
-                item.id === product.id
-                  ? { ...item, quantity: item.quantity + quantity }
-                  : item
-              ),
-            };
+            newItems = state.items.map((item) =>
+              item.id === product.id
+                ? { ...item, quantity: item.quantity + quantity }
+                : item
+            );
+          } else {
+            newItems = [...state.items, { ...product, quantity }];
           }
-          return { items: [...state.items, { ...product, quantity }] };
+          
+          if (useAuthStore.getState().isAuthenticated) {
+            useAuthStore.getState().syncCartToServer(newItems);
+          }
+          return { items: newItems };
         });
       },
 
       removeFromCart: (productId) => {
-        set((state) => ({
-          items: state.items.filter((item) => item.id !== productId),
-        }));
+        set((state) => {
+          const newItems = state.items.filter((item) => item.id !== productId);
+          if (useAuthStore.getState().isAuthenticated) {
+            useAuthStore.getState().syncCartToServer(newItems);
+          }
+          return { items: newItems };
+        });
       },
 
       updateQuantity: (productId, quantity) => {
         if (quantity < 1) return;
-        set((state) => ({
-          items: state.items.map((item) =>
+        set((state) => {
+          const newItems = state.items.map((item) =>
             item.id === productId ? { ...item, quantity } : item
-          ),
-        }));
+          );
+          if (useAuthStore.getState().isAuthenticated) {
+            useAuthStore.getState().syncCartToServer(newItems);
+          }
+          return { items: newItems };
+        });
       },
 
-      clearCart: () => set({ items: [] }),
+      clearCart: () => {
+        set({ items: [] });
+        if (useAuthStore.getState().isAuthenticated) {
+          useAuthStore.getState().syncCartToServer([]);
+        }
+      },
 
       getCartTotal: () => {
         return get().items.reduce((total, item) => total + item.price * item.quantity, 0);

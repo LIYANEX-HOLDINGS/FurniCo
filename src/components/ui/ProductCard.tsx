@@ -8,6 +8,9 @@ import { useWishlistStore } from "@/store/wishlistStore";
 import { useUiStore } from "@/store/uiStore";
 import { Product } from "@/data/mockProducts";
 
+import { useTranslation } from "@/hooks/useTranslation";
+import { Price } from "./Price";
+
 export interface ProductCardProps {
   id: string;
   name: string;
@@ -41,6 +44,7 @@ export function ProductCard({
   const isInWishlist = useWishlistStore((state) => state.isInWishlist(id));
   const setQuickView = useUiStore((state) => state.setQuickViewProduct);
   const toggleCartDrawer = useUiStore((state) => state.toggleCartDrawer);
+  const { t } = useTranslation();
 
   const productObj: Product = {
     id, name, brand, price, oldPrice, rating, image, hoverImage, category, isSale
@@ -67,8 +71,8 @@ export function ProductCard({
       {/* Image Container */}
       <div className="relative aspect-[4/5] overflow-hidden bg-bg-light mb-4 rounded-sm">
         {isSale && (
-          <span className="absolute top-4 left-4 bg-[#e74c3c] text-white text-[11px] font-semibold px-2 py-0.5 rounded-full z-10 w-[46px] h-[46px] flex items-center justify-center -rotate-12 shadow-sm">
-            SALE
+          <span className="absolute top-4 left-4 bg-[#e74c3c] text-white text-[11px] font-semibold px-2 py-0.5 rounded-full z-10 w-[46px] h-[46px] flex items-center justify-center -rotate-12 shadow-sm uppercase">
+            {t('sale')}
           </span>
         )}
         
@@ -120,7 +124,7 @@ export function ProductCard({
             className="w-full bg-foreground text-white hover:bg-primary hover:text-white font-albert-sans font-medium text-[13px] uppercase tracking-wider py-[12px] rounded-sm shadow-sm transition-colors flex items-center justify-center gap-2"
           >
             <ShoppingCart className="w-[15px] h-[15px]" />
-            Add to cart
+            {t('add_to_cart')}
           </button>
         </div>
       </div>
@@ -142,9 +146,9 @@ export function ProductCard({
         {/* Pricing */}
         <div className="flex items-center justify-center gap-2.5 font-albert-sans font-medium text-[15px]">
           {oldPrice && (
-            <span className="text-[#999999] line-through">${oldPrice.toFixed(2)}</span>
+            <span className="text-[#999999] line-through"><Price amount={oldPrice} /></span>
           )}
-          <span className={oldPrice ? "text-[#e74c3c]" : "text-foreground"}>${price.toFixed(2)}</span>
+          <span className={oldPrice ? "text-[#e74c3c]" : "text-foreground"}><Price amount={price} /></span>
         </div>
       </div>
     </div>

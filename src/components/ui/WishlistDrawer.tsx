@@ -8,10 +8,14 @@ import { useWishlistStore } from '@/store/wishlistStore';
 import { useCartStore } from '@/store/cartStore';
 import { useUiStore } from '@/store/uiStore';
 
+import { useTranslation } from '@/hooks/useTranslation';
+import { Price } from './Price';
+
 export function WishlistDrawer() {
   const { items, toggleWishlist } = useWishlistStore();
   const { addToCart } = useCartStore();
   const { isWishlistDrawerOpen, toggleWishlistDrawer, toggleCartDrawer } = useUiStore();
+  const { t } = useTranslation();
 
   const handleMoveToCart = (product: any) => {
     addToCart(product);
@@ -47,7 +51,7 @@ export function WishlistDrawer() {
             <div className="flex items-center justify-between p-5 border-b border-border-light">
               <div className="flex items-center gap-2">
                 <Heart className="w-5 h-5 text-primary" />
-                <h2 className="font-albert-sans font-semibold text-lg">Wishlist ({items.length})</h2>
+                <h2 className="font-albert-sans font-semibold text-lg">{t('wishlist_title')} ({items.length})</h2>
               </div>
               <button onClick={toggleWishlistDrawer} className="p-2 hover:bg-bg-light rounded-full transition-colors">
                 <X className="w-5 h-5 text-text-muted" />
@@ -59,8 +63,8 @@ export function WishlistDrawer() {
               {items.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center text-text-muted">
                   <Heart className="w-16 h-16 mb-4 opacity-20" />
-                  <p className="font-albert-sans text-lg mb-2">Your wishlist is empty.</p>
-                  <p className="text-sm font-roboto px-8">Save items you like here to review or buy them later.</p>
+                  <p className="font-albert-sans text-lg mb-2">{t('wishlist_empty')}</p>
+                  <p className="text-sm font-roboto px-8">{t('wishlist_desc')}</p>
                 </div>
               ) : (
                 <div className="flex flex-col gap-6">
@@ -78,14 +82,14 @@ export function WishlistDrawer() {
                             <X className="w-4 h-4" />
                           </button>
                         </div>
-                        <span className="font-albert-sans font-semibold text-foreground mb-3">${item.price.toFixed(2)}</span>
+                        <Price amount={item.price} className="font-albert-sans font-semibold text-foreground mb-3" />
                         
                         <button 
                           onClick={() => handleMoveToCart(item)}
                           className="mt-auto w-full border border-primary text-primary hover:bg-primary hover:text-white text-[12px] font-medium py-2 rounded-sm transition-colors flex items-center justify-center gap-2"
                         >
                           <ShoppingCart className="w-3.5 h-3.5" />
-                          Add to Cart
+                          {t('add_to_cart')}
                         </button>
                       </div>
                     </div>
